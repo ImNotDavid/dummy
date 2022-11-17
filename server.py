@@ -15,6 +15,11 @@ def get_stats():
 
 
 class StatsHandler(RequestHandler):
+    
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
 
     def get(self):
         stats = get_stats()
@@ -25,6 +30,10 @@ class StatsHandler(RequestHandler):
             results.append(stat)
         results = json.dumps(results)
         self.write(results)
+     
+    def options(self, *args):
+        self.set_status(204)
+        self.finish()
 
 def make_app():
     return tornado.web.Application([
